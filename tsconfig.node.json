@@ -8,6 +8,7 @@
 			"@components/*": ["src/components/*"],
 			"@pages/*": ["src/pages/*"],
 			"@assets/*": ["src/assets/*"],
+			"@hooks/*": ["src/hooks/*"],
 		},
 		"composite": true,
 		"skipLibCheck": true,

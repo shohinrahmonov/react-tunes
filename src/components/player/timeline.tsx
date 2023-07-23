@@ -29,7 +29,7 @@ const Timeline = ({currentTime, duration, onSeek}: TimelineProps) => {
       )}
     >
       <SliderPrimitive.Track className="relative h-4 w-full grow overflow-hidden rounded-full bg-secondary">
-        <SliderPrimitive.Range className="absolute h-full backdrop-blur bg-white/50" />
+        <SliderPrimitive.Range className="absolute h-full backdrop-blur bg-black/10 dark:bg-white/50" />
       </SliderPrimitive.Track>
       <SliderPrimitive.Thumb asChild>
         <motion.span
@@ -39,7 +39,7 @@ const Timeline = ({currentTime, duration, onSeek}: TimelineProps) => {
           className="block h-4 w-1 rounded-sm bg-primary ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
         ></motion.span>
       </SliderPrimitive.Thumb>
-      <div className="absolute right-2 top-0 text-xs text-background space-x-1">
+      <div className="absolute right-2 top-0 text-xs text-foreground space-x-1">
         <span>{convertSecondsToMinutesAndSeconds(currentTime)}</span>
         <span> / </span>
         <span>{convertSecondsToMinutesAndSeconds(duration)}</span>

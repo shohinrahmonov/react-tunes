@@ -7,7 +7,11 @@ interface PlaylistProps {
   currentSongIndex: number;
 }
 
-const Playlist = ({playlist, setSongIndex, currentSongIndex}: PlaylistProps) => {
+const Playlist = ({
+  playlist,
+  setSongIndex,
+  currentSongIndex,
+}: PlaylistProps) => {
   return (
     <>
       {playlist.length > 0 ? (
@@ -17,11 +21,18 @@ const Playlist = ({playlist, setSongIndex, currentSongIndex}: PlaylistProps) => 
               onClick={() => setSongIndex(index)}
               key={index}
               className={cn(
-                "p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground",
+                "p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden",
                 index === currentSongIndex ? "bg-accent" : ""
               )}
             >
-              {song.title}
+              <span
+                className={cn(
+                  "inline-block animate-marquee whitespace-nowrap",
+                  index === currentSongIndex ? "sm:animate-none" : "animate-none"
+                )}
+              >
+                {song.title}
+              </span>
             </div>
           ))}
         </div>
