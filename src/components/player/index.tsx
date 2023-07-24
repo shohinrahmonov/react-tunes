@@ -10,6 +10,7 @@ import {readAsDataURL} from "@lib/file";
 
 import Playlist from "@components/player/playlist";
 import {usePlayerStore} from "@store/player.store";
+import Volume from "@components/player/volume";
 
 const Player = () => {
   const {
@@ -156,6 +157,7 @@ const Player = () => {
         onChange={(e) => handleUploadSongs(e)}
       />
       <Playlist />
+      <Volume />
     </div>
   );
 };

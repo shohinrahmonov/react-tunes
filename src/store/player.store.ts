@@ -1,7 +1,7 @@
 import {PlaylistModel} from "src/models/playlist.model";
 import {create} from "zustand";
-
-interface DialogState {
+export const DEFAULT_VOLUME = 50;
+interface PlayerState {
   playing: boolean;
   playlist: PlaylistModel[];
   duration: number;
@@ -17,12 +17,12 @@ interface DialogState {
   updatePlaying: (playing: boolean) => void;
 }
 
-export const usePlayerStore = create<DialogState>()((set) => ({
+export const usePlayerStore = create<PlayerState>()((set) => ({
   playlist: [],
   duration: 0,
   currentTime: 0,
   activeSongIndex: 0,
-  volume: 50,
+  volume: DEFAULT_VOLUME,
   playing: false,
   addPlaylist: (playlist) => set((state) => ({...state, playlist: playlist})),
   removeSong: (songName) =>
