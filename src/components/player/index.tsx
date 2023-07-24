@@ -3,7 +3,7 @@ import {cn} from "@lib/utils";
 import {Button} from "@ui/button";
 import {Input} from "@ui/input";
 import {Slider} from "@ui/slider";
-import {useState, useRef, useEffect} from "react";
+import {useRef, useEffect} from "react";
 import ReactHowler from "react-howler";
 import Timeline from "@components/player/timeline";
 import {readAsDataURL} from "@lib/file";
