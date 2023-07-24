@@ -15,14 +15,14 @@ const Player = () => {
   const {
     playing,
     playlist,
-    addPlaylist,
     activeSongIndex,
     volume,
+    addPlaylist,
     updateVolume,
     updateActiveSongIndex,
     updateCurrentTime,
     updateDuration,
-    updatePlaying
+    updatePlaying,
   } = usePlayerStore((state) => state);
   const playerRef = useRef<ReactHowler | null>();
 
@@ -117,7 +117,7 @@ const Player = () => {
         </Button>
       </div>
       <div className="flex items-center my-4">
-        {playlist.length > 0 && (
+        {playlist.length > 0 && playlist[activeSongIndex] && (
           <ReactHowler
             src={playlist[activeSongIndex].song}
             playing={playing}
