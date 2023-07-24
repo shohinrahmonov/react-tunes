@@ -7,23 +7,30 @@ import {useState, useRef, useEffect} from "react";
 import ReactHowler from "react-howler";
 import Timeline from "@components/player/timeline";
 import {readAsDataURL} from "@lib/file";
-import {PlaylistModel} from "src/models/playlist.model";
+
 import Playlist from "@components/player/playlist";
+import {usePlayerStore} from "@store/player.store";
 
 const Player = () => {
-  const [playing, setPlaying] = useState(false);
-  const [duration, setDuration] = useState(0);
-  const [playlist, setPlaylist] = useState<PlaylistModel[]>([]);
-  const [songIndex, setSongIndex] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [volume, setVolume] = useState(50);
+  const {
+    playing,
+    playlist,
+    addPlaylist,
+    activeSongIndex,
+    volume,
+    updateVolume,
+    updateActiveSongIndex,
+    updateCurrentTime,
+    updateDuration,
+    updatePlaying
+  } = usePlayerStore((state) => state);
   const playerRef = useRef<ReactHowler | null>();
 
   useEffect(() => {
     const playerInterval = setInterval(() => {
       if (playerRef.current) {
-        setDuration(playerRef.current.duration());
-        setCurrentTime(playerRef.current.seek());
+        updateDuration(playerRef.current.duration());
+        updateCurrentTime(playerRef.current.seek());
       }
     }, 1000);
 
@@ -36,7 +43,7 @@ const Player = () => {
 
   const volumeHandler = (e: number[]) => {
     const value = e[0];
-    setVolume(value);
+    updateVolume(value);
     playerRef.current && playerRef.current.howler.volume(value / 100);
   };
 
@@ -63,21 +70,21 @@ const Player = () => {
           return {...file, song};
         });
         const results = await Promise.all(fileReadPromises);
-        setPlaylist(results);
-        setPlaying(true);
+        addPlaylist(results);
+        updatePlaying(true);
       } catch (error) {
         console.error("Error reading files:", error);
       }
     }
   };
   const onChangeSongNext = () => {
-    if (playlist[songIndex + 1]) {
-      setSongIndex(songIndex + 1);
+    if (playlist[activeSongIndex + 1]) {
+      updateActiveSongIndex(activeSongIndex + 1);
     }
   };
   const onChangeSongPrev = () => {
-    if (playlist[songIndex - 1]) {
-      setSongIndex(songIndex - 1);
+    if (playlist[activeSongIndex - 1]) {
+      updateActiveSongIndex(activeSongIndex - 1);
     }
   };
   return (
@@ -85,7 +92,7 @@ const Player = () => {
       <div className="my-2 space-x-3 flex justify-center">
         <Button
           variant={"ghost"}
-          disabled={!playlist[songIndex - 1]}
+          disabled={!playlist[activeSongIndex - 1]}
           onClick={onChangeSongPrev}
         >
           <Icons.left className="h-6 w-6" />
@@ -93,7 +100,7 @@ const Player = () => {
         <Button
           variant={"ghost"}
           disabled={playlist.length < 1}
-          onClick={() => setPlaying(!playing)}
+          onClick={() => updatePlaying(!playing)}
         >
           {playing ? (
             <Icons.pause className="h-6 w-6" />
@@ -103,7 +110,7 @@ const Player = () => {
         </Button>
         <Button
           variant={"ghost"}
-          disabled={!playlist[songIndex + 1]}
+          disabled={!playlist[activeSongIndex + 1]}
           onClick={onChangeSongNext}
         >
           <Icons.right className="h-6 w-6" />
@@ -112,15 +119,13 @@ const Player = () => {
       <div className="flex items-center my-4">
         {playlist.length > 0 && (
           <ReactHowler
-            src={playlist[songIndex].song}
+            src={playlist[activeSongIndex].song}
             playing={playing}
             volume={volume / 100}
             ref={(_player) => (playerRef.current = _player)}
           />
         )}
         <Timeline
-          duration={duration}
-          currentTime={currentTime}
           onSeek={(duration) =>
             playerRef.current && playerRef.current.seek(duration)
           }
@@ -150,11 +155,7 @@ const Player = () => {
         className="my-4"
         onChange={(e) => handleUploadSongs(e)}
       />
-      <Playlist
-        playlist={playlist}
-        currentSongIndex={songIndex}
-        setSongIndex={setSongIndex}
-      />
+      <Playlist />
     </div>
   );
 };

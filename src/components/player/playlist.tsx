@@ -1,38 +1,51 @@
 import {cn} from "@lib/utils";
-import {PlaylistModel} from "src/models/playlist.model";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@ui/dropdown";
+import {Button} from "@ui/button";
+import {Icons} from "@components/icons";
+import {usePlayerStore} from "@store/player.store";
 
-interface PlaylistProps {
-  playlist: PlaylistModel[];
-  setSongIndex: React.Dispatch<React.SetStateAction<number>>;
-  currentSongIndex: number;
-}
-
-const Playlist = ({
-  playlist,
-  setSongIndex,
-  currentSongIndex,
-}: PlaylistProps) => {
+const Playlist = () => {
+  const {removeSong, updateActiveSongIndex, activeSongIndex, playlist} =
+    usePlayerStore((state) => state);
   return (
     <>
       {playlist.length > 0 ? (
         <div className="space-y-2">
           {playlist.map((song, index) => (
             <div
-              onClick={() => setSongIndex(index)}
+              onClick={() => updateActiveSongIndex(index)}
               key={index}
               className={cn(
-                "p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden",
-                index === currentSongIndex ? "bg-accent" : ""
+                "flex justify-between items-center p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden",
+                index === activeSongIndex ? "bg-accent" : ""
               )}
             >
               <span
                 className={cn(
                   "inline-block animate-marquee whitespace-nowrap",
-                  index === currentSongIndex ? "sm:animate-none" : "animate-none"
+                  index === activeSongIndex ? "sm:animate-none" : "animate-none"
                 )}
               >
                 {song.title}
               </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="absolute right-4">
+                    <Icons.dots className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuItem onClick={() => removeSong(song.title)}>
+                    <Icons.trash className="mr-2 w-4 h-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ))}
         </div>
