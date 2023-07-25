@@ -4,12 +4,12 @@ import {motion} from "framer-motion";
 
 import {cn} from "@lib/utils";
 import {useState} from "react";
-import {usePlayerStore} from "@store/player.store";
 interface TimelineProps {
   onSeek?: (number: number) => void;
+  currentTime: number;
+  duration: number
 }
-const Timeline = ({onSeek}: TimelineProps) => {
-  const {currentTime, duration} = usePlayerStore((state) => state);
+const Timeline = ({onSeek, currentTime, duration}: TimelineProps) => {
   const [seeking, setSeeking] = useState(false);
 
   const handleSeekTrack = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

@@ -3,14 +3,11 @@ import {cn} from "@lib/utils";
 import {Button} from "@ui/button";
 import {Input} from "@ui/input";
 import {Slider} from "@ui/slider";
-import {useRef, useEffect} from "react";
-import ReactHowler from "react-howler";
-import Timeline from "@components/player/timeline";
 import {readAsDataURL} from "@lib/file";
-
 import Playlist from "@components/player/playlist";
 import {usePlayerStore} from "@store/player.store";
 import Volume from "@components/player/volume";
+import PlayerSelf from "@components/player/player";
 
 const Player = () => {
   const {
@@ -21,36 +18,12 @@ const Player = () => {
     addPlaylist,
     updateVolume,
     updateActiveSongIndex,
-    updateCurrentTime,
-    updateDuration,
     updatePlaying,
   } = usePlayerStore((state) => state);
-  const playerRef = useRef<ReactHowler | null>();
-  const playerIntervalRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    const updatePlayerInfo = () => {
-      if (playerRef.current) {
-        updateDuration(playerRef.current.duration());
-        updateCurrentTime(playerRef.current.seek());
-      }
-      
-      playerIntervalRef.current = requestAnimationFrame(updatePlayerInfo);
-    };
-
-    playerIntervalRef.current = requestAnimationFrame(updatePlayerInfo);
-
-    return () => {
-      if (playerIntervalRef.current) {
-        cancelAnimationFrame(playerIntervalRef.current);
-      }
-    };
-  }, []);
 
   const volumeHandler = (e: number[]) => {
     const value = e[0];
     updateVolume(value);
-    playerRef.current && playerRef.current.howler.volume(value / 100);
   };
 
   const handleUploadSongs = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +58,7 @@ const Player = () => {
   };
   const onChangeSongNext = () => {
     if (playlist[activeSongIndex + 1]) {
+      console.log("updating song");
       updateActiveSongIndex(activeSongIndex + 1);
     }
   };
@@ -123,19 +97,7 @@ const Player = () => {
         </Button>
       </div>
       <div className="flex items-center my-4">
-        {playlist.length > 0 && playlist[activeSongIndex] && (
-          <ReactHowler
-            src={playlist[activeSongIndex].song}
-            playing={playing}
-            volume={volume / 100}
-            ref={(_player) => (playerRef.current = _player)}
-          />
-        )}
-        <Timeline
-          onSeek={(duration) =>
-            playerRef.current && playerRef.current.seek(duration)
-          }
-        />
+        <PlayerSelf />
         <div className="flex items-center justify-between w-40 ml-2">
           <Icons.volume
             className="cursor-pointer w-6 h-6"

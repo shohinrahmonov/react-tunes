@@ -27,8 +27,8 @@ const Playlist = () => {
             >
               <span
                 className={cn(
-                  "inline-block animate-marquee whitespace-nowrap",
-                  index === activeSongIndex ? "sm:animate-none" : "animate-none"
+                  "inline-block animate-marquee whitespace-nowrap w-[90%]",
+                  index === activeSongIndex ? "sm:animate-none" : "animate-none truncate  "
                 )}
               >
                 {song.title}
