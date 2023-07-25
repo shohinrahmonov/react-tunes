@@ -21,14 +21,16 @@ const Playlist = () => {
               onClick={() => updateActiveSongIndex(index)}
               key={index}
               className={cn(
-                "flex justify-between items-center p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden",
+                "flex justify-between items-center p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden relative",
                 index === activeSongIndex ? "bg-accent" : ""
               )}
             >
               <span
                 className={cn(
                   "inline-block animate-marquee whitespace-nowrap w-[90%]",
-                  index === activeSongIndex ? "sm:animate-none" : "animate-none truncate  "
+                  index === activeSongIndex
+                    ? "sm:animate-none"
+                    : "animate-none truncate  "
                 )}
               >
                 {song.title}

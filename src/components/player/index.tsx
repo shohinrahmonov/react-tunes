@@ -8,6 +8,7 @@ import Playlist from "@components/player/playlist";
 import {usePlayerStore} from "@store/player.store";
 import Volume from "@components/player/volume";
 import PlayerSelf from "@components/player/player";
+import Wave from "@components/player/wave";
 
 const Player = () => {
   const {
@@ -97,6 +98,7 @@ const Player = () => {
       </div>
       <div className="flex items-center my-4">
         <PlayerSelf />
+        <Wave className="mx-2" />
         <div className="flex items-center justify-between w-40 ml-2">
           <Icons.volume
             className="cursor-pointer w-6 h-6"

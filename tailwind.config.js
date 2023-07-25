@@ -20,7 +20,7 @@ export default {
       center: true,
       padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        "lg": "900px",
       },
     },
     extend: {
@@ -69,12 +69,17 @@ export default {
       },
       animation: {
         marquee: "marquee 15s linear infinite",
+        wave: "wave 1.2s linear infinite",
       },
       keyframes: {
         marquee: {
           "0%": {transform: "translateX(0%)"},
           "100%": {transform: "translateX(-100%)"},
         },
+        wave: {
+          "50%": {height: "20%"},
+          "100%": {height: "100%"},
+        }
       },
     },
   },

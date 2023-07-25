@@ -11,7 +11,9 @@ const Index = () => {
         value={theme === "dark" ? true : false}
         onChange={toggleTheme}
       />
-      <Player />
+      <div className="container">
+        <Player />
+      </div>
     </>
   );
 };
