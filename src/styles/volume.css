@@ -1,0 +1,3 @@
+.line-volume{
+	background-image: repeating-linear-gradient(90deg, transparent, transparent 10px, hsl(var(--secondary)) 10px, hsl(var(--secondary)) 12px);
+}

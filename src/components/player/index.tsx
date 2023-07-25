@@ -58,7 +58,6 @@ const Player = () => {
   };
   const onChangeSongNext = () => {
     if (playlist[activeSongIndex + 1]) {
-      console.log("updating song");
       updateActiveSongIndex(activeSongIndex + 1);
     }
   };

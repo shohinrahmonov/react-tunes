@@ -1,3 +1,4 @@
+import "@src/styles/volume.css"
 import {Icons} from "@components/icons";
 import {usePlayerStore} from "@store/player.store";
 import {motion} from "framer-motion";
@@ -22,8 +23,8 @@ const Volume = () => {
           )}
           <div className="flex bg-secondary h-2 w-full mt-auto">
             <motion.div
-              animate={{width: `${volume}%`}}
-              className="h-full bg-primary relative"
+              animate={{width: `${volume}%`, }}
+              className="line-volume h-full bg-primary relative"
             ></motion.div>
           </div>
         </motion.div>
