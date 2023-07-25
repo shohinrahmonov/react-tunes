@@ -5,24 +5,17 @@ import {motion} from "framer-motion";
 import {cn} from "@lib/utils";
 import {useState} from "react";
 interface TimelineProps {
-  onSeek?: (number: number) => void;
+  onSeek: (number: number) => void;
   currentTime: number;
   duration: number
 }
 const Timeline = ({onSeek, currentTime, duration}: TimelineProps) => {
   const [seeking, setSeeking] = useState(false);
-
-  const handleSeekTrack = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const xPos =
-      (e.pageX - e.currentTarget.getBoundingClientRect().left) /
-      e.currentTarget.offsetWidth;
-    onSeek && onSeek(xPos * duration);
-  };
   return (
     <SliderPrimitive.Root
       onMouseEnter={() => setSeeking(true)}
       onMouseLeave={() => setSeeking(false)}
-      onClick={(e) => handleSeekTrack(e)}
+      onValueChange={(value) => onSeek(value[0] / 100 * duration)}
       value={[((currentTime || 0) / (duration || 1)) * 100 || 0]}
       className={cn(
         "relative flex w-full cursor-pointer select-none items-center"
