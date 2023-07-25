@@ -26,18 +26,23 @@ const Player = () => {
     updatePlaying,
   } = usePlayerStore((state) => state);
   const playerRef = useRef<ReactHowler | null>();
+  const playerIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const playerInterval = setInterval(() => {
+    const updatePlayerInfo = () => {
       if (playerRef.current) {
         updateDuration(playerRef.current.duration());
         updateCurrentTime(playerRef.current.seek());
       }
-    }, 1000);
+      
+      playerIntervalRef.current = requestAnimationFrame(updatePlayerInfo);
+    };
+
+    playerIntervalRef.current = requestAnimationFrame(updatePlayerInfo);
 
     return () => {
-      if (playerInterval) {
-        clearInterval(playerInterval);
+      if (playerIntervalRef.current) {
+        cancelAnimationFrame(playerIntervalRef.current);
       }
     };
   }, []);
