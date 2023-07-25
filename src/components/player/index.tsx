@@ -106,6 +106,7 @@ const Player = () => {
           />
           <Slider
             max={100}
+            step={10}
             defaultValue={[100]}
             value={[volume]}
             onValueChange={volumeHandler}
