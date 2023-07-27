@@ -164,8 +164,6 @@ const Connect = () => {
             )}
           </Button>
         )}
-        {gdriveResponse.loading && <div>Loading...</div>}
-        {gdriveResponse.error && <div>{gdriveResponse.error}</div>}
         <SheetContent>
           <SheetHeader>
             <SheetTitle>Gdrive content</SheetTitle>
