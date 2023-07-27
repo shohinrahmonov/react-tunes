@@ -8,7 +8,6 @@ import {
 import {Button} from "@ui/button";
 import {Icons} from "@components/icons";
 import {usePlayerStore} from "@store/player.store";
-
 const Playlist = () => {
   const {removeSong, updateActiveSongIndex, activeSongIndex, playlist} =
     usePlayerStore((state) => state);

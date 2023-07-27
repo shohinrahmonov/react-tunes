@@ -1,14 +1,13 @@
 import {Icons} from "@components/icons";
 import {cn} from "@lib/utils";
 import {Button} from "@ui/button";
-import {Input} from "@ui/input";
 import {Slider} from "@ui/slider";
-import {readAsDataURL} from "@lib/file";
 import Playlist from "@components/player/playlist";
 import {usePlayerStore} from "@store/player.store";
 import Volume from "@components/player/volume";
 import PlayerSelf from "@components/player/player";
 import Wave from "@components/player/wave";
+import Upload from "@components/player/upload";
 
 const Player = () => {
   const {
@@ -16,7 +15,6 @@ const Player = () => {
     playlist,
     activeSongIndex,
     volume,
-    addPlaylist,
     updateVolume,
     updateActiveSongIndex,
     updatePlaying,
@@ -27,36 +25,6 @@ const Player = () => {
     updateVolume(value);
   };
 
-  const handleUploadSongs = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-
-    const newUploadedFiles = e.target.files
-      ? Array.from(e.target.files).map((file) => ({
-          title: file.name,
-          file: file,
-          song: "",
-        }))
-      : [];
-    const filtredPlaylist = playlist
-      .concat(newUploadedFiles)
-      .filter((file, index, self) => {
-        return self.findIndex((f) => f.title === file.title) === index;
-      });
-
-    if (files && files.length > 0) {
-      try {
-        const fileReadPromises = filtredPlaylist.map(async (file) => {
-          const song = (await readAsDataURL(file.file)) as string;
-          return {...file, song};
-        });
-        const results = await Promise.all(fileReadPromises);
-        addPlaylist(results);
-        updatePlaying(true);
-      } catch (error) {
-        console.error("Error reading files:", error);
-      }
-    }
-  };
   const onChangeSongNext = () => {
     if (playlist[activeSongIndex + 1]) {
       updateActiveSongIndex(activeSongIndex + 1);
@@ -118,13 +86,7 @@ const Player = () => {
           />
         </div>
       </div>
-      <Input
-        type="file"
-        accept="audio/*"
-        multiple
-        className="my-4"
-        onChange={(e) => handleUploadSongs(e)}
-      />
+      <Upload />
       <Playlist />
       <Volume />
     </div>
