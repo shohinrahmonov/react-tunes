@@ -82,7 +82,7 @@
 	}
 }
 
-.stroke:nth-child() {
+.stroke:nth-child(1) {
 	animation-delay: 0s;
 }
 .stroke:nth-child(2) {
