@@ -8,17 +8,20 @@ import {
 import {Button} from "@ui/button";
 import {Icons} from "@components/icons";
 import {usePlaylistStore} from "@store/playlist.store";
+import {usePlayerStore} from "@store/player.store";
 import {MediaProvider} from "@models/playlist.model";
 
 const Playlist = () => {
   const {playlist, removeSong, activeSongIndex, updateActiveSongIndex} =
     usePlaylistStore((state) => state);
+  const {updatePlaying} = usePlayerStore((state) => state);
   const chooseSongHandler = (index: number) => {
     updateActiveSongIndex(index);
+    updatePlaying(true);
   };
   const removeSongHandler = (id: string) => {
     removeSong(id);
-  };
+  }
   return (
     <>
       {playlist.length > 0 ? (
@@ -48,7 +51,9 @@ const Playlist = () => {
                     [MediaProvider.gdrive]: (
                       <Icons.gdrive className="h-4 w-4" />
                     ),
-                    [MediaProvider.native]: <Icons.latop className="h-4 w-4" />,
+                    [MediaProvider.native]: (
+                      <Icons.latop className="h-4 w-4" />
+                    ),
                     [MediaProvider.youtube]: (
                       <Icons.youtube className="h-4 w-40" />
                     ),
