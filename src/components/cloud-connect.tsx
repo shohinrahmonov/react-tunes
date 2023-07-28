@@ -3,7 +3,7 @@ import {drive_v3} from "googleapis";
 import {downloadFileFromDrive, isAudioFile} from "@lib/file";
 import {Button} from "@ui/button";
 import {Icons} from "@components/icons";
-import {MediaProvider, PlaylistModel} from "@models/playlist.model";
+import {MediaProvider} from "@models/playlist.model";
 import {
   Sheet,
   SheetContent,
@@ -20,6 +20,12 @@ interface GDriveFile {
   name: string;
   mimeType: string;
 }
+interface GDriveFileState extends GDriveFile {
+  clientId: string;
+  title: string;
+  provider: MediaProvider;
+  downloading: boolean;
+}
 
 const Connect = () => {
   if (
@@ -30,14 +36,14 @@ const Connect = () => {
   }
   const [sheetOpen, setSheetOpen] = useState(false);
   const {toast} = useToast();
-  const {playlist, addSongToPlaylist, addPlaylist} = usePlaylistStore(
+  const {playlist, addSongToPlaylist} = usePlaylistStore(
     (state) => state
   );
   const [initializeGapiClient, setInitializeGapiClient] = useState(false);
   const [gdriveResponse, setGdriveResponse] = useState<{
     loading: boolean;
     error?: string;
-    content: PlaylistModel[];
+    content: GDriveFileState[];
   }>({loading: false, content: []});
   useEffect(() => {
     async function fetchData() {
@@ -109,7 +115,6 @@ const Connect = () => {
         );
 
         if (audioFiles.length === 0) {
-          console.log("No audio files found.");
           toast({
             title: "No audio",
             description: "No audio files found in your account",
@@ -121,26 +126,60 @@ const Connect = () => {
           });
           return;
         }
-        const newOnes: PlaylistModel[] = await Promise.all(
+        const gdriveResponseContent: GDriveFileState[] = await Promise.all(
           audioFiles.map(async (file: GDriveFile) => ({
-            id: v4(),
+            id: file.id,
+            clientId: v4(),
             title: file.name,
-            song: await downloadFileFromDrive(file.id, file.mimeType),
+            mimeType: file.mimeType,
             provider: MediaProvider.gdrive,
           }))
         );
         setGdriveResponse({
           ...gdriveResponse,
           loading: false,
-          content: newOnes,
+          content: gdriveResponseContent,
         });
       }
     }
     fetchData();
   }, [initializeGapiClient]);
-  const addSongToPlaylistHandler = () => {
-    addPlaylist(gdriveResponse.content);
-    setSheetOpen(false);
+
+  const addSongToPlaylistHandler = async (song: GDriveFileState) => {
+    setGdriveResponse({
+      ...gdriveResponse,
+      content: gdriveResponse.content.map((s) =>
+        s.clientId === song.clientId ? {...s, downloading: true} : s
+      ),
+    });
+    try {
+      const songFile = (await downloadFileFromDrive(
+        song.id,
+        song.mimeType
+      )) as string;
+      addSongToPlaylist({
+        id: song.clientId,
+        title: song.title,
+        song: songFile,
+        provider: song.provider,
+      });
+      toast({
+        title: "Song added",
+        description: `Song ${song.title} added to playlist`,
+      });
+    } catch (err: any) {
+      toast({
+        title: "Error: downloading song",
+        variant: "destructive",
+      });
+    } finally {
+      setGdriveResponse({
+        ...gdriveResponse,
+        content: gdriveResponse.content.map((s) =>
+          s.clientId === song.clientId ? {...s, downloading: false} : s
+        ),
+      });
+    }
   };
   return (
     <>
@@ -180,31 +219,32 @@ const Connect = () => {
             gdriveResponse.content.map((song) => (
               <div
                 className="flex justify-between items-center py-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden relative"
-                key={song.title}
+                key={song.clientId}
               >
                 <div className="whitespace-nowrap w-[90%] animate-marquee">
                   {song.title}
                 </div>
                 <Button
                   variant="outline"
-                  disabled={playlist.some(
-                    (s) =>
-                      s.id === song.id ||
-                      (song.provider === MediaProvider.gdrive &&
-                        s.title === song.title)
-                  )}
+                  disabled={
+                    playlist.some(
+                      (s) =>
+                        s.id === song.clientId ||
+                        (song.provider === MediaProvider.gdrive &&
+                          s.title === song.title)
+                    ) || song.downloading
+                  }
                   className="absolute right-4"
-                  onClick={() => addSongToPlaylist(song)}
+                  onClick={() => addSongToPlaylistHandler(song)}
                 >
-                  <Icons.plus className="w-4 h-4" />
+                  {song.downloading ? (
+                    <Icons.spinner className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Icons.plus className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
             ))}
-          {gdriveResponse.content.length > 0 && (
-            <Button className="w-full" onClick={addSongToPlaylistHandler}>
-              Add all songs to playlist
-            </Button>
-          )}
         </SheetContent>
       </Sheet>
     </>

@@ -8,16 +8,15 @@ import Volume from "@components/player/volume";
 import PlayerSelf from "@components/player/player";
 import Wave from "@components/player/wave";
 import Upload from "@components/player/upload";
-import { usePlaylistStore } from "@store/playlist.store";
+import {usePlaylistStore} from "@store/playlist.store";
 
 const Player = () => {
-  const {
-    playing,
-    volume,
-    updateVolume,
-    updatePlaying,
-  } = usePlayerStore((state) => state);
-  const {playlist,activeSongIndex, updateActiveSongIndex} = usePlaylistStore(state=> state);
+  const {playing, volume, updateVolume, updatePlaying} = usePlayerStore(
+    (state) => state
+  );
+  const {playlist, activeSongIndex, updateActiveSongIndex} = usePlaylistStore(
+    (state) => state
+  );
 
   const volumeHandler = (e: number[]) => {
     const value = e[0];

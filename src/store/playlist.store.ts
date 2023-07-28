@@ -10,7 +10,7 @@ interface PlaylistState {
   activeSongIndex: number;
   addPlaylist: (playlist: PlaylistModel[]) => void;
   addSongToPlaylist: (song: PlaylistModel) => void;
-  removeSong: (songName: string) => void;
+  removeSong: (id: string) => void;
   updateActiveSongIndex: (activeSongIndex: number) => void;
 }
 
@@ -39,10 +39,10 @@ export const usePlaylistStore = create<PlaylistState>()(
         }),
       addSongToPlaylist: (song) =>
         set((state) => ({...state, playlist: [...state.playlist, song]})),
-      removeSong: (songName) =>
+      removeSong: (id) =>
         set((state) => ({
           ...state,
-          playlist: state.playlist.filter((song) => song.title !== songName),
+          playlist: state.playlist.filter((song) => song.id !== id),
         })),
       updateActiveSongIndex: (activeSongIndex) =>
         set((state) => ({
