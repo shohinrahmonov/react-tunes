@@ -1,3 +1,4 @@
+import "@src/styles/wave.css"
 import {cn} from "@lib/utils";
 import {usePlayerStore} from "@store/player.store";
 
@@ -10,7 +11,7 @@ const Wave = ({className}: {className?: string}) => {
       {storokes.map((_, index) => (
         <div
           key={index}
-          className="stroke animate-wave w-1 h-full rounded-full bg-gradient-to-t from-primary to-secondary"
+          className="stroke animate-wave w-1 h-full hover:bg-gradient-to-b transition-colors rounded-full bg-gradient-to-t from-primary to-secondary"
           style={{animationPlayState: playing ? "running" : "paused"}}
         ></div>
       ))}

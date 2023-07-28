@@ -7,17 +7,24 @@ import {
 } from "@ui/dropdown";
 import {Button} from "@ui/button";
 import {Icons} from "@components/icons";
+import {usePlaylistStore} from "@store/playlist.store";
 import {usePlayerStore} from "@store/player.store";
 const Playlist = () => {
-  const {removeSong, updateActiveSongIndex, activeSongIndex, playlist} =
-    usePlayerStore((state) => state);
+  const {playlist, removeSong, activeSongIndex, updateActiveSongIndex} =
+    usePlaylistStore((state) => state);
+  const {updatePlaying} =
+  usePlayerStore((state) => state);
+    const chooseSongHandler = (index: number) => {
+      updateActiveSongIndex(index);
+      updatePlaying(true);
+    }
   return (
     <>
       {playlist.length > 0 ? (
         <div className="space-y-2">
           {playlist.map((song, index) => (
             <div
-              onClick={() => updateActiveSongIndex(index)}
+              onClick={() => chooseSongHandler(index)}
               key={index}
               className={cn(
                 "flex justify-between items-center p-4 rounded-sm cursor-pointer hover:bg-accent hover:text-accent-foreground overflow-x-hidden relative",

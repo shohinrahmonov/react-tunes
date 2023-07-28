@@ -1,13 +1,16 @@
+import {usePlaylistStore} from "@store/playlist.store";
 import {usePlayerStore} from "@store/player.store";
 import {MediaProvider, PlaylistModel} from "@models/playlist.model";
 import {v4} from "uuid";
 import {readAsDataURL} from "@lib/file";
 import {Input} from "@ui/input";
 
+
 const Upload = () => {
-  const {playlist, addPlaylist, updatePlaying} = usePlayerStore(
+  const {playlist, addPlaylist} = usePlaylistStore(
     (state) => state
   );
+  const {updatePlaying} = usePlayerStore((state) => state);
 
   const handleUploadSongs = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

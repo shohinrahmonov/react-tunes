@@ -1,10 +1,14 @@
 import {usePlayerStore} from "@store/player.store";
+import {usePlaylistStore} from "@store/playlist.store";
 import {useEffect, useRef, useState} from "react";
 import ReactHowler from "react-howler";
 import Timeline from "@components/player/timeline";
 
 const PlayerSelf = () => {
-  const {playing, playlist, activeSongIndex, volume} = usePlayerStore(
+  const {playing, volume} = usePlayerStore(
+    (state) => state
+  );
+  const {playlist, activeSongIndex} = usePlaylistStore(
     (state) => state
   );
   const playerRef = useRef<ReactHowler | null>();

@@ -11,6 +11,8 @@
 			"@hooks/*": ["src/hooks/*"],
 			"@store/*": ["src/store/*"],
 			"@models/*": ["src/models/*"],
+			"@access/*": ["src/access/*"],
+			"@services/*": ["src/services/*"],
 		},
 		"composite": true,
 		"skipLibCheck": true,

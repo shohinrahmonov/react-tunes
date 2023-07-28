@@ -1,4 +1,3 @@
-import {usePlayerStore} from "@store/player.store";
 import {useEffect, useState} from "react";
 import {drive_v3} from "googleapis";
 import {downloadFileFromDrive, isAudioFile} from "@lib/file";
@@ -14,6 +13,7 @@ import {
 } from "@components/ui/sheet";
 import {v4} from "uuid";
 import {useToast} from "@hooks/use-toast";
+import {usePlaylistStore} from "@store/playlist.store";
 
 interface GDriveFile {
   id: string;
@@ -30,7 +30,7 @@ const Connect = () => {
   }
   const [sheetOpen, setSheetOpen] = useState(false);
   const {toast} = useToast();
-  const {playlist, addSongToPlaylist, addPlaylist} = usePlayerStore(
+  const {playlist, addSongToPlaylist, addPlaylist} = usePlaylistStore(
     (state) => state
   );
   const [initializeGapiClient, setInitializeGapiClient] = useState(false);
@@ -147,7 +147,7 @@ const Connect = () => {
       <Sheet open={sheetOpen} onOpenChange={() => setSheetOpen(false)}>
         {gdriveResponse.content.length > 0 ? (
           <Button variant={"outline"} onClick={() => setSheetOpen(true)}>
-            <span className="mr-2">Open Drive Content</span>
+            <span className="mr-2">Open GDrive Content Files</span>
             <Icons.gdrive className="h-6 w-6" />
           </Button>
         ) : (
@@ -156,11 +156,16 @@ const Connect = () => {
             onClick={() => setInitializeGapiClient(true)}
             disabled={initializeGapiClient || gdriveResponse.loading}
           >
-            <span className="mr-2">Connect with</span>
             {gdriveResponse.loading ? (
-              <Icons.spinner className="h-6 w-6 animate-spin" />
+              <>
+                <span className="mr-2">Connecting</span>
+                <Icons.spinner className="h-6 w-6 animate-spin" />
+              </>
             ) : (
-              <Icons.gdrive className="h-6 w-6" />
+              <>
+                <span className="mr-2">Connect</span>
+                <Icons.gdrive className="h-6 w-6" />
+              </>
             )}
           </Button>
         )}
