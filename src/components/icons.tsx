@@ -13,6 +13,8 @@ import {
   LucideProps,
   Loader2,
   Plus,
+  Laptop2,
+  Youtube
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -30,6 +32,8 @@ export const Icons = {
   down: ChevronDown,
   plus: Plus,
   spinner: Loader2,
+  latop: Laptop2,
+  youtube: Youtube,
   gdrive: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.3 78" {...props}>
       <path
