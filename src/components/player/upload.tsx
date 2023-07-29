@@ -1,6 +1,6 @@
 import {usePlaylistStore} from "@store/playlist.store";
 import {usePlayerStore} from "@store/player.store";
-import {MediaProvider, PlaylistModel} from "@models/playlist.model";
+import {MediaProvider} from "@models/playlist.model";
 import {v4} from "uuid";
 import {readAsDataURL} from "@lib/file";
 import {Input} from "@ui/input";
@@ -35,10 +35,13 @@ const Upload = () => {
                 f.file
             ) === index
           );
-        }) as (Omit<PlaylistModel, "file"> & {file: File})[];
+        });
       try {
         const fileReadPromises = filtredPlaylist.map(async (file) => {
-          const song = (await readAsDataURL(file.file)) as string;
+          let song: string = "";
+          if(typeof file.file?.name === 'string') {
+            song = (await readAsDataURL(file.file)) as string;
+          }
           return {...file, song};
         });
         const results = await Promise.all(fileReadPromises);
