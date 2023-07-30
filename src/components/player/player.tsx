@@ -8,7 +8,7 @@ const PlayerSelf = () => {
   const {playing, volume} = usePlayerStore(
     (state) => state
   );
-  const {playlist, activeSongIndex} = usePlaylistStore(
+  const {playlist, activeSongIndex, updateActiveSongIndex} = usePlaylistStore(
     (state) => state
   );
   const playerRef = useRef<ReactHowler | null>();
@@ -42,6 +42,7 @@ const PlayerSelf = () => {
           src={playlist[activeSongIndex].song}
           playing={playing}
           volume={volume / 100}
+          onEnd={() => updateActiveSongIndex(activeSongIndex + 1)}
           ref={(_player) => (playerRef.current = _player)}
         />
       )}
