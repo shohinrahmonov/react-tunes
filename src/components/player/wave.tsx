@@ -5,7 +5,7 @@ import {usePlayerStore} from "@store/player.store";
 const Wave = ({className}: {className?: string}) => {
   const playing = usePlayerStore((state) => state.playing);
   const storokes = Array.from({length: 9}, (_, i) => i + 1);
-  console.log('playing', playing)
+
   return (
     <div className={cn("flex items-center h-4 space-x-1", className)}>
       {storokes.map((_, index) => (
